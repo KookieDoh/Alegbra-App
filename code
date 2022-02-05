@@ -1,0 +1,19 @@
+/* This function takes the name of the button being clicked on and changes the screen
+to the given screen name after the button is clicked.
+*/
+function changeScreens(buttonName, screenName) {
+  onEvent(buttonName, "click", function(){
+    setScreen(screenName);
+  });
+}
+
+/* Screen/button naming:
+For buttons: B + name of button
+For tutorials: T + name of tutorial
+*/
+
+changeScreens("BSolvingEquations", "TSolvingEquations");
+changeScreens("BCombiningTerms", "TCombiningTerms");
+changeScreens("BLinearFunc", "TLinearFunc");
+changeScreens("BEvaluation", "TEvaluation");
+changeScreens("BFactoring", "TFactoring");
