@@ -26,6 +26,67 @@ changeScreens("BStartEquations", "ESolvingEquations");
 
 var coefficientX = Math.floor(Math.random() * (20-1+1) + 1);
 var constant = Math.floor(Math.random()*(50-1+1)+1);
+
+//decide whether the constant will be positive or negative.
+var posOrNeg = Math.floor(Math.random()*(2-1+1) + 1);
+if(posOrNeg == 1){
+  constant = constant * -1;
+}
+
 var constant2 = coefficientX * (Math.floor(Math.random()*(10-1+1)+1)) + constant;
 
-setText("EquationText", coefficientX + "x + " + constant + " = " + constant2);
+// Set the equation text using defined variables.
+if(posOrNeg == 1){
+  setText("EquationText", coefficientX + "x - " + (-1*constant) + " = " + constant2);
+}else{
+  setText("EquationText", coefficientX + "x + " + constant + " = " + constant2);
+}
+
+// Determine the correct option from the set of options
+var correctOption;
+if(posOrNeg == 1){
+  correctOption = "Add " +(-1*constant) + " to both sides";
+}else{
+  correctOption = "Subtract " + constant + " on both sides";
+}
+
+// Set the text for the four options
+setText("Option3", "Multiply by " + coefficientX + " on both sides");
+setText("Option4", "Divide by " + coefficientX + " on both sides");
+
+if(posOrNeg == 1){
+  setText("Option1", "Add " + (-1 * constant) + " to both sides");
+  setText("Option2", "Subtract " + (-1 * constant) + " to both sides");
+}else{
+  setText("Option1", "Add " + constant + " to both sides");
+  setText("Option2", "Subtract " + constant + " on both sides");
+}
+
+function Incorrect(){
+  setText("Answer", "Incorrect, try again.");
+}
+function Correct(){
+  setText("Answer", "Correct! Good job!");
+  setProperty("NextStep", "hidden", false);
+}
+
+function clickOption(option){
+  onEvent(option, "click", function(){
+    if(getText(option) != correctOption){
+      Incorrect();
+    }else{
+      Correct();
+    }
+});
+}
+
+clickOption("Option1");
+clickOption("Option2");
+clickOption("Option3");
+clickOption("Option4");
+
+changeScreens("NextStep", "ESolvingEquations2");
+setText("Option5", getText("Option1"));
+setText("Option6", getText("Option2"));
+setText("Option7", getText("Option3"));
+setText("Option8", getText("Option4"));
