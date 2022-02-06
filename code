@@ -32,7 +32,7 @@ var correctOption2;
 
 // This function notifies the user whether the option they chose was incorrect.
 function Incorrect(answerBox){
-  setText(answerBox, "Incorrect, try again.");
+  setText(answerBox, "Incorrect, try again!");
 }
 /* This function notifies the user whether they option they chose was correct
 and allows them to continue onto the next step. If they have completed the second
@@ -201,6 +201,27 @@ var decimalOrWhole;
 
 //change screens from Linear Functions tutorial to the exercises.
 onEvent("BStartFunc", "click", function( ) {
+  //make sure the checkmarks are hidden at the start.
+  setProperty("checkmark1", "hidden", true);
+  setProperty("checkmark2", "hidden", true);
+  setProperty("checkmark3", "hidden", true);
+  
+  //make sure the xmarks are hidden at the start.
+  setProperty("xmark1", "hidden", true);
+  setProperty("xmark2", "hidden", true);
+  setProperty("xmark3", "hidden", true);
+
+  //make sure the answer box is empty at the start.
+  setText("AnswerLF", "");
+  
+  //make sure the submit answers box is visible at the start.
+  setProperty("BSubmitAnswers", "hidden", false);
+  
+  //make sure the dropdown boxes are on the first option.
+  setProperty("dropdown1", "index", 0);
+  setProperty("dropdown2", "index", 0);
+  setProperty("dropdown3", "index", 0);
+    
   setScreen("ELinearFunc");
   //decide whether the slope will be a decimal or whole number.
   decimalOrWhole = Math.floor(Math.random()*(2-1+1) + 1);
@@ -232,9 +253,162 @@ onEvent("BStartFunc", "click", function( ) {
     setText("EquationTextLF", "y = " + slope + "x + " + intercept);
   }
   
-  setProperty("dropdown1", "options", ["a", "b"]);
+  // set the text for the dropdown options.
+  setProperty("dropdown1", "options", [intercept * -1, intercept, slope, slope * -1]);
+  setProperty("dropdown2", "options", [intercept * -1, intercept, slope, slope * -1]);
   
-  
-  
-  
+  // check whether the submitted answers are correct.
+  onEvent("BSubmitAnswers", "click", function( ) {
+    // when the answers are correct, make green check marks appear.
+    if(getText("dropdown1") == intercept){
+      setProperty("xmark1", "hidden", true);
+      setProperty("checkmark1", "hidden", false);
+    }
+    // when the answers are incorrect, make red x marks appear.
+    else{
+      setProperty("checkmark1", "hidden", true);
+      setProperty("xmark1", "hidden", false);
+    }
+    if(getText("dropdown2") == slope){
+      setProperty("xmark2", "hidden", true);
+      setProperty("checkmark2", "hidden", false);
+    }else{
+      setProperty("checkmark2", "hidden", true);
+      setProperty("xmark2", "hidden", false);
+    }
+    if(slope>0){ // if slope is positive graph should lead upward
+      if(getText("dropdown3") == "upward"){
+        setProperty("xmark3", "hidden", true);
+        setProperty("checkmark3", "hidden", false);
+      }else{
+        setProperty("checkmark3", "hidden", true);
+        setProperty("xmark3", "hidden", false);
+      }
+    }else{ // if slope is negative graph should lead downward
+      if(getText("dropdown3") == "downward"){
+        setProperty("xmark3", "hidden", true);
+        setProperty("checkmark3", "hidden", false);
+      }else{
+        setProperty("checkmark3", "hidden", true);
+        setProperty("xmark3", "hidden", false);
+      }
+    }
+    // When all the answers are correct, allow the user to continue.
+    if(getProperty("checkmark1", "hidden") == false && 
+      getProperty("checkmark2", "hidden") == false &&
+      getProperty("checkmark3", "hidden") == false){
+        Correct("AnswerLF", "TryAnotherLF");
+        setProperty("BSubmitAnswers", "hidden", true);
+      }else{
+        Incorrect("AnswerLF");
+      }
+  });
 });
+
+//same code block as above, except it occurs when TryAnotherLF button is pressed.
+onEvent("TryAnotherLF", "click", function( ) {
+  //make sure the checkmarks are hidden at the start.
+  setProperty("checkmark1", "hidden", true);
+  setProperty("checkmark2", "hidden", true);
+  setProperty("checkmark3", "hidden", true);
+  
+  //make sure the xmarks are hidden at the start.
+  setProperty("xmark1", "hidden", true);
+  setProperty("xmark2", "hidden", true);
+  setProperty("xmark3", "hidden", true);
+
+  //make sure the answer box is empty at the start.
+  setText("AnswerLF", "");
+  
+  //make sure the submit answers box is visible at the start.
+  setProperty("BSubmitAnswers", "hidden", false);
+  
+  //make sure the dropdown boxes are on the first option.
+  setProperty("dropdown1", "index", 0);
+  setProperty("dropdown2", "index", 0);
+  setProperty("dropdown3", "index", 0);
+  
+  setScreen("ELinearFunc");
+  //decide whether the slope will be a decimal or whole number.
+  decimalOrWhole = Math.floor(Math.random()*(2-1+1) + 1);
+  if (decimalOrWhole == 1) { //if the slope is a decimal.
+    slope = (Math.floor(Math.random() * (9-1+1) + 1))/10; // random num between 0.1 and 0.9.
+  }else{ // if the slope is a whole number
+    slope = Math.floor(Math.random()*(50-1+1)+1); //random num between 1 and 50.
+  }
+  
+  // decide whether the slope will be positive or negative.
+  posOrNeg = Math.floor(Math.random()*(2-1+1) + 1);
+  if(posOrNeg == 1){
+    slope = slope * -1;
+  }
+  
+  // calculate the y-intercept.
+  intercept = Math.floor(Math.random()*(100-1+1)+1); //random num between 1 and 100.
+  
+  // decide whether the y-intercept will be positive or negative.
+  posOrNeg = Math.floor(Math.random()*(2-1+1) + 1);
+  if(posOrNeg == 1){
+    intercept = intercept * -1;
+  }
+  
+  // set the text for the equation using the defined variables.
+  if(intercept<0){
+    setText("EquationTextLF", "y = " + slope + "x - " + (intercept *-1));
+  }else{
+    setText("EquationTextLF", "y = " + slope + "x + " + intercept);
+  }
+  
+  // set the text for the dropdown options.
+  setProperty("dropdown1", "options", [intercept * -1, intercept, slope, slope * -1]);
+  setProperty("dropdown2", "options", [intercept * -1, intercept, slope, slope * -1]);
+  
+  // check whether the submitted answers are correct.
+  onEvent("BSubmitAnswers", "click", function( ) {
+    // when the answers are correct, make green check marks appear.
+    if(getText("dropdown1") == intercept){
+      setProperty("xmark1", "hidden", true);
+      setProperty("checkmark1", "hidden", false);
+    }
+    // when the answers are incorrect, make red x marks appear.
+    else{
+      setProperty("checkmark1", "hidden", true);
+      setProperty("xmark1", "hidden", false);
+    }
+    if(getText("dropdown2") == slope){
+      setProperty("xmark2", "hidden", true);
+      setProperty("checkmark2", "hidden", false);
+    }else{
+      setProperty("checkmark2", "hidden", true);
+      setProperty("xmark2", "hidden", false);
+    }
+    if(slope>0){ // if slope is positive graph should lead upward
+      if(getText("dropdown3") == "upward"){
+        setProperty("xmark3", "hidden", true);
+        setProperty("checkmark3", "hidden", false);
+      }else{
+        setProperty("checkmark3", "hidden", true);
+        setProperty("xmark3", "hidden", false);
+      }
+    }else{ // if slope is negative graph should lead downward
+      if(getText("dropdown3") == "downward"){
+        setProperty("xmark3", "hidden", true);
+        setProperty("checkmark3", "hidden", false);
+      }else{
+        setProperty("checkmark3", "hidden", true);
+        setProperty("xmark3", "hidden", false);
+      }
+    }
+    // When all the answers are correct, allow the user to continue.
+    if(getProperty("checkmark1", "hidden") == false && 
+      getProperty("checkmark2", "hidden") == false &&
+      getProperty("checkmark3", "hidden") == false){
+        Correct("AnswerLF", "TryAnotherLF");
+        setProperty("BSubmitAnswers", "hidden", true);
+      }else{
+        Incorrect("AnswerLF");
+      }
+  });
+});
+
+    
