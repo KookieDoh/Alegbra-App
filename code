@@ -697,3 +697,14 @@ function goToHomeScreen(homeButtonName) {
     setScreen("HomeScreen");
   });
 }
+
+goToHomeScreen("BHome1");
+goToHomeScreen("BHome2");
+goToHomeScreen("BHome3");
+goToHomeScreen("BHome4");
+goToHomeScreen("BHome5");
+goToHomeScreen("BHome6");
+goToHomeScreen("BHome7");
+goToHomeScreen("BHome8");
+goToHomeScreen("BHome9");
+
