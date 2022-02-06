@@ -54,6 +54,7 @@ function clickOption(option, answer, answerBox, buttonName){
 });
 }
 
+//change screens from Solving Equations tutorial to Solving equations exercises.
 onEvent("BStartEquations", "click", function(){
     //make sure NextStep and TryAnother buttons are hidden at the start.
     setProperty("NextStep", "hidden", true);
@@ -192,3 +193,48 @@ onEvent("TryAnother", "click", function(){
     clickOption("Option8", correctOption2, "Answer2", "TryAnother");
     
   });
+
+//initializing variables to be used in Linear Functions exercises.
+var slope;
+var intercept;
+var decimalOrWhole;
+
+//change screens from Linear Functions tutorial to the exercises.
+onEvent("BStartFunc", "click", function( ) {
+  setScreen("ELinearFunc");
+  //decide whether the slope will be a decimal or whole number.
+  decimalOrWhole = Math.floor(Math.random()*(2-1+1) + 1);
+  if (decimalOrWhole == 1) { //if the slope is a decimal.
+    slope = (Math.floor(Math.random() * (9-1+1) + 1))/10; // random num between 0.1 and 0.9.
+  }else{ // if the slope is a whole number
+    slope = Math.floor(Math.random()*(50-1+1)+1); //random num between 1 and 50.
+  }
+  
+  // decide whether the slope will be positive or negative.
+  posOrNeg = Math.floor(Math.random()*(2-1+1) + 1);
+  if(posOrNeg == 1){
+    slope = slope * -1;
+  }
+  
+  // calculate the y-intercept.
+  intercept = Math.floor(Math.random()*(100-1+1)+1); //random num between 1 and 100.
+  
+  // decide whether the y-intercept will be positive or negative.
+  posOrNeg = Math.floor(Math.random()*(2-1+1) + 1);
+  if(posOrNeg == 1){
+    intercept = intercept * -1;
+  }
+  
+  // set the text for the equation using the defined variables.
+  if(intercept<0){
+    setText("EquationTextLF", "y = " + slope + "x - " + (intercept *-1));
+  }else{
+    setText("EquationTextLF", "y = " + slope + "x + " + intercept);
+  }
+  
+  setProperty("dropdown1", "options", ["a", "b"]);
+  
+  
+  
+  
+});
