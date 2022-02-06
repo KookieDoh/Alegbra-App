@@ -10,10 +10,22 @@ function changeScreens(buttonName, screenName) {
 /* Screen/button naming:
 For buttons: B + name of button
 For tutorials: T + name of tutorial
+For exercises: E + name of exercise
 */
 
+//changing screens from home screen to tutorial screens
 changeScreens("BSolvingEquations", "TSolvingEquations");
 changeScreens("BCombiningTerms", "TCombiningTerms");
 changeScreens("BLinearFunc", "TLinearFunc");
 changeScreens("BEvaluation", "TEvaluation");
 changeScreens("BFactoring", "TFactoring");
+
+//changing screens from tutorial screens to exercise screens
+changeScreens("BStartEquations", "ESolvingEquations");
+
+
+var coefficientX = Math.floor(Math.random() * (20-1+1) + 1);
+var constant = Math.floor(Math.random()*(50-1+1)+1);
+var constant2 = coefficientX * (Math.floor(Math.random()*(10-1+1)+1)) + constant;
+
+setText("EquationText", coefficientX + "x + " + constant + " = " + constant2);
