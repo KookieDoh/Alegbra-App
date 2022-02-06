@@ -20,73 +20,175 @@ changeScreens("BLinearFunc", "TLinearFunc");
 changeScreens("BEvaluation", "TEvaluation");
 changeScreens("BFactoring", "TFactoring");
 
-//changing screens from tutorial screens to exercise screens
-changeScreens("BStartEquations", "ESolvingEquations");
-
-
-var coefficientX = Math.floor(Math.random() * (20-1+1) + 1);
-var constant = Math.floor(Math.random()*(50-1+1)+1);
-
-//decide whether the constant will be positive or negative.
-var posOrNeg = Math.floor(Math.random()*(2-1+1) + 1);
-if(posOrNeg == 1){
-  constant = constant * -1;
-}
-
-var constant2 = coefficientX * (Math.floor(Math.random()*(10-1+1)+1)) + constant;
-
-// Set the equation text using defined variables.
-if(posOrNeg == 1){
-  setText("EquationText", coefficientX + "x - " + (-1*constant) + " = " + constant2);
-}else{
-  setText("EquationText", coefficientX + "x + " + constant + " = " + constant2);
-}
-
-// Determine the correct option from the set of options
+// initializing variables to be used in the Solving Equations exercises.
+var coefficientX;
+var constant;
+var posOrNeg;
+var constant2;
 var correctOption;
-if(posOrNeg == 1){
-  correctOption = "Add " +(-1*constant) + " to both sides";
-}else{
-  correctOption = "Subtract " + constant + " on both sides";
+var correctOption2;
+
+// Initializing functions to be used in the Solving Equations exercises.
+
+// This function notifies the user whether the option they chose was incorrect.
+function Incorrect(answerBox){
+  setText(answerBox, "Incorrect, try again.");
+}
+/* This function notifies the user whether they option they chose was correct
+and allows them to continue onto the next step. If they have completed the second
+step, it allows them to try another problem.
+*/
+function Correct(answerBox, buttonName){
+  setText(answerBox, "Correct! Good job!");
+  setProperty(buttonName, "hidden", false);
 }
 
-// Set the text for the four options
-setText("Option3", "Multiply by " + coefficientX + " on both sides");
-setText("Option4", "Divide by " + coefficientX + " on both sides");
-
-if(posOrNeg == 1){
-  setText("Option1", "Add " + (-1 * constant) + " to both sides");
-  setText("Option2", "Subtract " + (-1 * constant) + " to both sides");
-}else{
-  setText("Option1", "Add " + constant + " to both sides");
-  setText("Option2", "Subtract " + constant + " on both sides");
-}
-
-function Incorrect(){
-  setText("Answer", "Incorrect, try again.");
-}
-function Correct(){
-  setText("Answer", "Correct! Good job!");
-  setProperty("NextStep", "hidden", false);
-}
-
-function clickOption(option){
+// This function checks whether the option the user clicked is correct.
+function clickOption(option, answer, answerBox, buttonName){
   onEvent(option, "click", function(){
-    if(getText(option) != correctOption){
-      Incorrect();
+    if(getText(option) != answer){
+      Incorrect(answerBox);
     }else{
-      Correct();
+      Correct(answerBox, buttonName);
     }
 });
 }
 
-clickOption("Option1");
-clickOption("Option2");
-clickOption("Option3");
-clickOption("Option4");
+onEvent("BStartEquations", "click", function(){
+    //make sure NextStep and TryAnother buttons are hidden at the start.
+    setProperty("NextStep", "hidden", true);
+    setProperty("TryAnother", "hidden", true);
+    
+    //make sure the two answer boxes are empty at the start.
+    setText("Answer", "");
+    setText("Answer2", "");
+    
+    setScreen("ESolvingEquations");
+    //Calculate values used in the equation.
+    // The coefficient will be a random number between 1 and 20.
+    coefficientX = Math.floor(Math.random() * (20-1+1) + 1);
+    // The first constant term will be a random number between 1 and 50.
+    constant = Math.floor(Math.random()*(50-1+1)+1);
+    //decide whether the constant will be positive or negative.
+    posOrNeg = Math.floor(Math.random()*(2-1+1) + 1);
+    
+    /*
+    SOURCE FOR RANDOM NUMBERS:
+    https://stackoverflow.com/questions/4959975/
+    generate-random-number-between-two-numbers-in-javascript
+    */
+    
+    if(posOrNeg == 1){
+      constant = constant * -1;
+    }
+    constant2 = coefficientX * (Math.floor(Math.random()*(10-1+1)+1)) + constant;
+    
+    // Set the equation text using defined variables.
+    if(posOrNeg == 1){
+      setText("EquationText", coefficientX + "x - " + (-1*constant) + " = " + constant2);
+    }else{
+      setText("EquationText", coefficientX + "x + " + constant + " = " + constant2);
+    }
+    
+    // Determine the correct option from the set of options
+    if(posOrNeg == 1){
+      correctOption = "Add " +(-1*constant) + " to both sides";
+    }else{
+      correctOption = "Subtract " + constant + " on both sides";
+    }
+    
+    // Set the text for the four options
+    setText("Option3", "Multiply by " + coefficientX + " on both sides");
+    setText("Option4", "Divide by " + coefficientX + " on both sides");
+    
+    if(posOrNeg == 1){
+      setText("Option1", "Add " + (-1 * constant) + " to both sides");
+      setText("Option2", "Subtract " + (-1 * constant) + " to both sides");
+    }else{
+      setText("Option1", "Add " + constant + " to both sides");
+      setText("Option2", "Subtract " + constant + " on both sides");
+    }
+    clickOption("Option1", correctOption, "Answer", "NextStep");
+    clickOption("Option2", correctOption, "Answer", "NextStep");
+    clickOption("Option3", correctOption, "Answer", "NextStep");
+    clickOption("Option4", correctOption, "Answer", "NextStep");
+    
+    changeScreens("NextStep", "ESolvingEquations2");
+    setText("Option5", getText("Option1"));
+    setText("Option6", getText("Option2"));
+    setText("Option7", getText("Option3"));
+    setText("Option8", getText("Option4"));
+    
+    // Set the equation text using the defined variables after adding/subtracting.
+    setText("EquationText2", coefficientX + "x " + " = " + (constant2 - constant));
+    
+    correctOption2 = "Divide by " + coefficientX + " on both sides";
+    clickOption("Option5", correctOption2, "Answer2", "TryAnother");
+    clickOption("Option6", correctOption2, "Answer2", "TryAnother");
+    clickOption("Option7", correctOption2, "Answer2", "TryAnother");
+    clickOption("Option8", correctOption2, "Answer2", "TryAnother");
+    
+  });
 
-changeScreens("NextStep", "ESolvingEquations2");
-setText("Option5", getText("Option1"));
-setText("Option6", getText("Option2"));
-setText("Option7", getText("Option3"));
-setText("Option8", getText("Option4"));
+//Same code as above block, except it occurs when TryAnother button is pressed.
+onEvent("TryAnother", "click", function(){
+    setProperty("NextStep", "hidden", true);
+    setProperty("TryAnother", "hidden", true);
+    setText("Answer", "");
+    setText("Answer2", "");
+    setScreen("ESolvingEquations");
+    coefficientX = Math.floor(Math.random() * (20-1+1) + 1);
+    constant = Math.floor(Math.random()*(50-1+1)+1);
+    //decide whether the constant will be positive or negative.
+    posOrNeg = Math.floor(Math.random()*(2-1+1) + 1);
+    if(posOrNeg == 1){
+      constant = constant * -1;
+    }
+    constant2 = coefficientX * (Math.floor(Math.random()*(10-1+1)+1)) + constant;
+    
+    // Set the equation text using defined variables.
+    if(posOrNeg == 1){
+      setText("EquationText", coefficientX + "x - " + (-1*constant) + " = " + constant2);
+    }else{
+      setText("EquationText", coefficientX + "x + " + constant + " = " + constant2);
+    }
+    
+    // Determine the correct option from the set of options
+    if(posOrNeg == 1){
+      correctOption = "Add " +(-1*constant) + " to both sides";
+    }else{
+      correctOption = "Subtract " + constant + " on both sides";
+    }
+    
+    // Set the text for the four options
+    setText("Option3", "Multiply by " + coefficientX + " on both sides");
+    setText("Option4", "Divide by " + coefficientX + " on both sides");
+    
+    if(posOrNeg == 1){
+      setText("Option1", "Add " + (-1 * constant) + " to both sides");
+      setText("Option2", "Subtract " + (-1 * constant) + " to both sides");
+    }else{
+      setText("Option1", "Add " + constant + " to both sides");
+      setText("Option2", "Subtract " + constant + " on both sides");
+    }
+    clickOption("Option1", correctOption, "Answer", "NextStep");
+    clickOption("Option2", correctOption, "Answer", "NextStep");
+    clickOption("Option3", correctOption, "Answer", "NextStep");
+    clickOption("Option4", correctOption, "Answer", "NextStep");
+    
+    changeScreens("NextStep", "ESolvingEquations2");
+    setText("Option5", getText("Option1"));
+    setText("Option6", getText("Option2"));
+    setText("Option7", getText("Option3"));
+    setText("Option8", getText("Option4"));
+    
+    // Set the equation text using the defined variables after adding/subtracting.
+    setText("EquationText2", coefficientX + "x " + " = " + (constant2 - constant));
+    
+    correctOption2 = "Divide by " + coefficientX + " on both sides";
+    clickOption("Option5", correctOption2, "Answer2", "TryAnother");
+    clickOption("Option6", correctOption2, "Answer2", "TryAnother");
+    clickOption("Option7", correctOption2, "Answer2", "TryAnother");
+    clickOption("Option8", correctOption2, "Answer2", "TryAnother");
+    
+  });
